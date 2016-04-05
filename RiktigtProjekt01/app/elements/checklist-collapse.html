@@ -1,0 +1,185 @@
+<dom-module name="checklist-collapse">
+  <style is="custom-style">
+  .menu-container, .menu-header-container { position: relative; }
+    /*.menu-container > div:last-of-type { margin-bottom: 0; }*/
+    .menu-row { margin: 8px 8px 0 8px; }
+    .menu-row .inner { 
+      padding: 8px;
+      position: relative;
+      background: #fff;
+      border-radius: 0 0 3px 3px;
+    }
+    .menu-element {
+      position: relative;
+      width: 100%;
+      overflow: auto;
+      padding: 12px 8px;
+      border:solid;
+      border-width: 1px;
+      border-color:lightgray;
+      box-sizing: border-box;
+      background: #fff;
+    }
+    .menu-element iron-icon { color: #227E94; }
+    .menu-row.selected .menu-element, .menu-row.selected .menu-element iron-icon {  
+      background: #227E94;
+      color: #fff !important;
+    }
+    .menu-comment { overflow: auto;  padding-top: 5px;}
+    .radio-button-style{
+      display:block;
+      font-size:12px;
+      padding: 5px;
+      margin:0px;
+    }
+    .mini-header{
+      font-family:   Helvetica, Arial, sans-serif;
+      font-size: 24px;
+      font-style: bold;
+      margin: 0px;
+      text-align: center;
+    }
+    .menu-button{
+      color:black;
+      padding:0px;
+      margin:0px;
+      width:24px;
+      height:24px;
+    }
+    .float-right-div{
+      float:right;
+    }
+    iron-collapse{
+      border:lightgray;
+      border:solid;
+      border-width: 1px;
+    }
+    .paper-collapse{
+      margin:0px;
+      padding:0px;
+    }
+    .main-menu{
+      text-align: center;
+      font-family:  Helvetica, Arial, sans-serif;
+      font-size: 26px;
+    }
+    .super-main-menu{
+      text-align: center;
+      font-family:  Helvetica, Arial, sans-serif;
+      font-style: bold;
+      font-size: 40px;
+    }
+    .button-group{
+      
+      margin:10px;
+    }
+    .bottom-button{
+      background-color: rgb(220,220,220);
+      padding:5px 20px;
+    }
+    .image-div{
+      flex;
+      background-color: gray;
+      height:200px;
+    }
+    .image-div img{
+      height: 100%;
+      width: 100%;
+      padding:0;
+      margin:0;
+    }
+    .spacetaker{
+      height:30px;
+    }
+    paper-textarea{
+      padding-bottom: 12px;
+    }
+  </style>
+
+  <template>
+    <paper-material class="menu-row" elevation="3">
+        <div class="menu-element">
+          <iron-icon icon="content-paste"></iron-icon>&nbsp;<span>{{question}}</span><div class="float-right-div"><iron-icon class="menu-button" icon="radio-button-checked" hidden$="{{hideAnswerTrue}}"></iron-icon><iron-icon class="menu-button" icon="content-paste" hidden$="{{hideRemark}}"></iron-icon><paper-icon-button class="menu-button" icon="create" hidden$="{{hideEdits}}"></paper-icon-button></div>
+        </div>
+      <iron-collapse id="ic" duration="0.2" role="group" opened="{{currentlyOpened}}">
+        <div class="inner">
+        <paper-radio-group id="rg" name="radio-group">
+        <span>{{answer}}</span>
+            <paper-radio-button id= "ja" noink class="radio-button-style" name="Ja">Ja</paper-radio-button>
+            <paper-radio-button id= "nej" noink class="radio-button-style" name="Nej">Nej</paper-radio-button>
+          </paper-radio-group>
+          <paper-textarea id="ta" name="text-area" label="Kommentar i fritext" maxlength="800" value="{{comment}}" char-counter ></paper-textarea>
+        </div>
+      </iron-collapse>
+      </div>
+      </paper-material>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'checklist-collapse',
+
+      behaviors: [],
+
+      properties: {
+        question: {
+          type: String,
+          notify: true,
+          value: ""
+        },
+        answer: {
+          type: String,
+          notify: true,
+          value: ""
+        },
+        comment: {
+          type: String,
+          notify: true,
+          value:""
+        },
+        hideRemark: {
+          type: Boolean,
+          computed: 'shouldIHideRemark(comment)',
+          value: true
+        },
+        hideAnswerTrue: {
+          type: Boolean,
+          computed: 'shouldIHideAnswer(answer)',
+          value: true
+        },
+        currentlyOpened: {
+          type: Boolean,
+          notify: true,
+          value: true
+        },
+        numberOfEdits:{
+          type: Number,
+          notify: true,
+          value: 0
+        },
+        hideEdits:{
+          type:Boolean,
+          computed: 'shouldIHideEdits(numberOfEdits)',
+          value: false
+        }
+      },
+      shouldIHideEdits: function(numberOfEdits){
+      },
+      shouldIHideRemark: function(comment){
+        console.log("hide comment : "+ this.hideRemark + "  " + this.comment);
+        if(this.comment.length>0){
+          return false;
+        }
+      },
+      shouldIHideAnswer: function(answer){
+        console.log("hide answer : "+this.hideAnswerTrue);
+          return false;
+      }
+
+      //shouldIShowEdits: function(){(numberOfEdits>0)},
+      //shouldIShowRemark: function(){(comment.length>0)},
+      //shouldIShowAnswer: function(){if(answer.length>0)return true}
+
+    });
+  </script>
+</dom-module>
